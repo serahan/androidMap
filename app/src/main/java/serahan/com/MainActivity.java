@@ -4,22 +4,25 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
+import android.graphics.Color;
+import android.graphics.PointF;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraPosition;
-import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.overlay.Align;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.util.FusedLocationSource;
-import com.naver.maps.map.widget.ZoomControlView;
+import com.naver.maps.map.util.MarkerIcons;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -131,6 +134,38 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Marker marker = new Marker();
         marker.setPosition(new LatLng(35.9424938, 126.683274));
         marker.setMap(naverMap);
+
+        Marker marker2 = new Marker();
+        marker2.setPosition(new LatLng(35.94310618, 126.68298307));
+        marker2.setMap(naverMap);
+
+        Marker marker3 = new Marker();
+        marker3.setPosition(new LatLng(35.94298469, 126.68371497));
+        marker3.setMap(naverMap);
+
+        // ########### 마커 이미지 #############
+        // OverlayImage : 오버레이에서 사용할 수 있는 비트맵 이미지 클래스
+        // drawable에 marker_icon 이라는 이름의 마커 이미지를 삽입
+        // marker.setIcon(OverlayImage.fromResource(R.drawable.marker_icon));
+        // marker.setWidth(50);
+        // marker.setHeight(80);
+        // marker.setAnchor(new PointF(1,1));
+
+        // 마커에 색 입히기
+        marker.setIcon(MarkerIcons.BLACK);
+        marker.setIconTintColor(Color.RED);
+        marker2.setIcon(MarkerIcons.BLACK);
+        marker2.setIconTintColor(Color.YELLOW);
+        marker3.setIconTintColor(Color.BLUE);
+
+        // 마커의 아이콘에 원근 효과 부여
+        marker.setIconPerspectiveEnabled(true);
+
+        // 마커의 캡션 텍스트 지정
+        marker.setCaptionText("Here!");
+
+        // 마커의 캡션이 아이콘 위에 배치
+        marker.setCaptionAlign(Align.Top);
 
         // ########### 마커가 클릭되면 '마커 클릭' 이라는 토스트 표시 #############
         marker.setOnClickListener(overlay -> {
