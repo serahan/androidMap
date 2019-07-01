@@ -11,24 +11,50 @@ import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraPosition;
 import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
+import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
+import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.widget.ZoomControlView;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+    private FusedLocationSource locationSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // ############### 위치 표시 ##################
+        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
         FragmentManager fm = getSupportFragmentManager();
         MapFragment mapFragment = (MapFragment)fm.findFragmentById(R.id.map);
         if(mapFragment == null) {
+            NaverMapOptions options = new NaverMapOptions().zoomControlEnabled(false);
             mapFragment = MapFragment.newInstance();
             fm.beginTransaction().add(R.id.map, mapFragment).commit();
         }
         mapFragment.getMapAsync(this);
+
+        // ####### Zoom 레이아웃 변경 : 기본 줌 컨트롤을 비활성화하고 오른쪽 아래에 별도의 줌 컨트롤을 배치하는 예제 #######
+        /* mapFragment.getMapAsync(naverMap -> {
+            ZoomControlView zoomControlView = findViewById(R.id.zoom);
+            zoomControlView.setMap(naverMap);
+        }); */
+    }
+
+    // ############### 위치 표시 ################
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
+                    return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override
@@ -70,5 +96,70 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // 지형도
         // naverMap.setMapType(NaverMap.MapType.Terrain);
 
+        // UI 설정
+        // UiSettings : UI와 관련된 설정을 담당하는 클래스
+        UiSettings uiSettings = naverMap.getUiSettings();
+
+        // 컨트롤 : 지도에 대한 정보 및 간단한 조작 기능을 제공하는 지도 위 버튼
+        // compassEnabled : 나침반 활성화 여부
+        // scaleBarEnabled : 축척 바 활성화 여부
+        // zoomButtonEnabled : 줌 버튼 활성화 여부
+        // indoorLevelPickerEnabled : 실내지도 층 피커 활성화 여부
+        // locationButtonEnabled : 현위치 버튼 활성화 여부
+        uiSettings.setLocationButtonEnabled(true); // 현위치 활성화
+
+        // uiSettings.setTiltGesturesEnabled(false); // 틸트 제스처 비활성화 ( 틸트 : 두개의 손가락으로 지도 위아래 드래그 -> 기울임 각도 변경)
+        // uiSettings.setRotateGesturesEnabled(false); // 회전 제스처 비활성화
+
+        naverMap.setOnMapClickListener((pointF, coord) -> Toast.makeText(this, "클릭 : " + coord.latitude + ", " + coord.longitude,  Toast.LENGTH_SHORT).show());
+        naverMap.setOnMapLongClickListener(((pointF, coord) -> Toast.makeText(this, "롱 클릭 : " + coord.latitude + ", " + coord.longitude, Toast.LENGTH_SHORT).show()));
+
+        naverMap.setOnMapClickListener(((pointF, coord) -> Toast.makeText(this,"지도 클릭", Toast.LENGTH_SHORT).show()));
+
+        // ############ 심볼 클릭 ################
+        naverMap.setOnSymbolClickListener(symbol -> {
+                if("군산대학교".equals(symbol.getCaption())){
+                Toast.makeText(this, "군산대학교 클릭", Toast.LENGTH_SHORT).show();
+                // 이벤트 소비, OnMapClick 이벤트는 발생하지 않음
+                return true;
+            }
+            // 이벤트 전파, OnMapClick 이벤트가 발생함
+            return false;
+        });
+
+        // ################# 마커 생성 #############
+        Marker marker = new Marker();
+        marker.setPosition(new LatLng(35.9424938, 126.683274));
+        marker.setMap(naverMap);
+
+        // ########### 마커가 클릭되면 '마커 클릭' 이라는 토스트 표시 #############
+        marker.setOnClickListener(overlay -> {
+            Toast.makeText(this, "마커 1 클릭", Toast.LENGTH_SHORT).show();
+            // 이벤트 소비, OnMapClick 이벤트는 발생하지 않음
+            return true;
+        });
+
+        // ############## 더블 탭했을 때 더블 탭된 지점의 좌표 표시. 화면 확대 X ###############
+        /* naverMap.setOnMapDoubleTapListener((pointF, coord) -> {
+            Toast.makeText(this,coord.latitude + ", " + coord.longitude,
+                    Toast.LENGTH_SHORT).show();
+            return true;
+        }); */
+
+        // ########### 지도를 두 손가락으로 탭했을 때 두 손가락 탭된 지점의 좌표를 토스트로 표시, 화면 축소 X ###################
+        /* naverMap.setOnMapTwoFingerTapListener((pointF, coord) -> {
+            Toast.makeText(this,coord.latitude + ", " + coord.longitude,
+                    Toast.LENGTH_SHORT).show();
+            return true;
+        }); */
+
+        // ############ 위치 표시 #########################
+        naverMap.setLocationSource(locationSource);
+        // ############ 위치 추적 모드 ####################
+        // None : 위치 추적 X
+        // NoFollow : 위치 추적 활성화 O, 현위치 오버레이가 사용자 위치 따라 이동, 지도 이동 X
+        // Follow : 위치 추적 활성화 O, 현위치 오버레이와 카메라의 좌표가 사용자 위치 따라 이동. 카메라 건드리면 NoFollow로 전환
+        // Face : 위치 추적 활성화 O, 현위치 오버레이, 카메라의 좌표, 베어링이 사용자의 위치 및 방향 따라 이동. 카메라 건드리면 NoFollow로 전환
+        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
     }
 }
