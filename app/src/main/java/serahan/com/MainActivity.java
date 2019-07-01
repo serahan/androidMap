@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraPosition;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
@@ -40,6 +42,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         CameraPosition cameraPosition = new CameraPosition(location,17);
         naverMap.setCameraPosition(cameraPosition);
 
+        /* CameraPosition cameraPosition = new CameraPosition(
+                new LatLng(37.5666102, 126.9783881),
+                16,     // 줌 레벨
+                20,     // 기울임 각도
+                180     // 베어링 각도
+        );
+
+        Toast.makeText(context, " 대상 지정 위도 : " + cameraPosition.target.latitude + ", " +
+                                "대상 지점 경도 : " +cameraPosition.target.longitude + ", " +
+                                "줌 레벨 : " + cameraPosition.zoom + ", " +
+                                "기울임 각도 : " + cameraPosition.tilt + ", " +
+                                "베어링 각도 : " + cameraPosition.bearing,
+                                Toast.LENGTH_SHORT).show(); */
+
         // 줌 범위 제한
         naverMap.setMinZoom(5.0);
         naverMap.setMaxZoom(18.0);
@@ -59,5 +75,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // naverMap.setMapType(NaverMap.MapType.Hybrid);
         // 지형도
         // naverMap.setMapType(NaverMap.MapType.Terrain);
+
+        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(37.5666102, 126.9783881));
+        naverMap.moveCamera(cameraUpdate);
+
     }
 }
