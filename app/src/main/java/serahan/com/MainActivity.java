@@ -36,14 +36,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // LatLng : 지도상의 위도, 경도 값을 저장하는 클래스
         // LatLng ( double latitude, double longitude )
-        LatLng location = new LatLng(35.9424938, 126.683274); // 군산대학교 아카데미홀 위치
+        // LatLng location = new LatLng(35.9424938, 126.683274); // 군산대학교 아카데미홀 위치
 
         // 카메라 위치와 줌 조절 (숫자가 클수록 확대)
         //CameraPosition cameraPosition = new CameraPosition(location,17);
         //naverMap.setCameraPosition(cameraPosition);
 
         CameraPosition cameraPosition = new CameraPosition(
-                new LatLng(37.5666102, 126.9783881),
+                new LatLng(35.9424938, 126.683274),
                 16,     // 줌 레벨
                 45,     // 기울임 각도
                 0     // 베어링 각도
@@ -69,9 +69,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // naverMap.setMapType(NaverMap.MapType.Hybrid);
         // 지형도
         // naverMap.setMapType(NaverMap.MapType.Terrain);
-
-        CameraUpdate cameraUpdate = CameraUpdate.scrollTo(new LatLng(37.5666102, 126.9783881));
-        naverMap.moveCamera(cameraUpdate);
 
     }
 }
