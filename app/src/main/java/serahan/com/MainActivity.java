@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         CameraPosition cameraPosition = new CameraPosition(
                 //new LatLng(35.9424938, 126.683274), // 군산대학교 아카데미홀
-                new LatLng(35.9437857, 126.681656),
-                16,     // 줌 레벨
+                new LatLng((35.9437857+35.846695)/2, (126.681656+127.129278)/2),
+                8,     // 줌 레벨
                 0,     // 기울임 각도
                 0     // 베어링 각도
         );
@@ -113,6 +113,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 return (CharSequence)infoWindow.getMarker().getTag();
             }
         });
+
+        // ############ 마커 리스트로 구현 ###################
+//        List<Marker> markers = new ArrayList<Marker>();
+//
+//        for(int i=0;i<4;i++)
+//        {
+//            Marker marker = new Marker();
+//        }
 
         // ############### 군산대학교 마커 ####################
         Marker marker_kunsanUni = new Marker();  // 군산대
@@ -154,6 +162,15 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             infoWindow.open(marker_JunbukUni); // 마커를 클릭할 때 정보창을 엶
             return true;
         });
+
+        PolylineOverlay polyline = new PolylineOverlay();
+        polyline.setCoords(Arrays.asList(
+                marker_kunsanUni.getPosition(),
+                marker_kunsanCenter.getPosition(),
+                marker_WongoangUni.getPosition(),
+                marker_JunbukUni.getPosition()
+        ));
+        polyline.setMap(naverMap);
 
 //        Overlay.OnClickListener listener = overlay -> {
 //            Marker marker = (Marker)overlay;
