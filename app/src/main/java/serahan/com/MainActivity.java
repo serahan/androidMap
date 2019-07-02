@@ -21,6 +21,7 @@ import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Align;
+import com.naver.maps.map.overlay.CircleOverlay;
 import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
@@ -83,7 +84,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //naverMap.setCameraPosition(cameraPosition);
 
         CameraPosition cameraPosition = new CameraPosition(
-                new LatLng(35.9424938, 126.683274),
+                //new LatLng(35.9424938, 126.683274), // 군산대학교 아카데미홀
+                new LatLng(37.5666102, 126.9783881),
                 16,     // 줌 레벨
                 45,     // 기울임 각도
                 0     // 베어링 각도
@@ -116,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         polyline.setJoinType(PolylineOverlay.LineJoin.Round); */
 
         // ########## 폴리곤 오버레이 #############
-        PolygonOverlay polygon = new PolygonOverlay();
+        /* PolygonOverlay polygon = new PolygonOverlay();
         polygon.setCoords(Arrays.asList(
                 new LatLng(37.5640984, 126.9712268),
                 new LatLng(37.5651279, 126.9767904),
@@ -153,7 +155,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // ############# 테두리 두께 ############
         polygon.setOutlineWidth(5);
         // ############## 테두리 색상 #########
-        polygon.setOutlineColor(Color.RED);
+        polygon.setOutlineColor(Color.RED); */
+
+        // ############ 서클 오버레이 ###############
+        CircleOverlay circle = new CircleOverlay();
+        circle.setCenter(new LatLng(37.5666102, 126.9783881));
+        circle.setRadius(500);
+        circle.setMap(naverMap);
+        // circle.setMap(null); // 제거
+        circle.setCenter(new LatLng(37.5666102, 126.9783881)); // 중심점 지정
+        circle.setRadius(500); // 서클 오버레이의 반경 500미터 지정
+        circle.setColor(Color.GREEN); // 색 지정
+        circle.setOutlineWidth(10); // 테두리 두께
+        circle.setOutlineColor(Color.BLUE); // 테두리 색상
 
         // 일반 지도
         // naverMap.setMapType(NaverMap.MapType.Basic);
