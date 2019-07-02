@@ -26,6 +26,7 @@ import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.OverlayImage;
+import com.naver.maps.map.overlay.PathOverlay;
 import com.naver.maps.map.overlay.PolygonOverlay;
 import com.naver.maps.map.overlay.PolylineOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
@@ -101,74 +102,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng southEast = new LatLng(44.35, 132);
         naverMap.setExtent(new LatLngBounds(northWest, southEast));
 
-        // ########### 폴리라인 오버레이 #############
-        //PolylineOverlay polyline = new PolylineOverlay();
-        // ########### 폴리라인 오버레이 좌표열 지정 ################
-        /* polyline.setCoords(Arrays.asList(
-                new LatLng(37.57152, 126.97714),
-                new LatLng(37.56607, 126.98268),
-                new LatLng(37.56445, 126.97707),
-                new LatLng(37.55855, 126.97822)
-        ));
-        polyline.setMap(naverMap);
-        polyline.setWidth(10);
-        polyline.setColor(Color.GREEN);
-        polyline.setPattern(10,5);
-        polyline.setCapType(PolylineOverlay.LineCap.Round);
-        polyline.setJoinType(PolylineOverlay.LineJoin.Round); */
-
-        // ########## 폴리곤 오버레이 #############
-        /* PolygonOverlay polygon = new PolygonOverlay();
-        polygon.setCoords(Arrays.asList(
-                new LatLng(37.5640984, 126.9712268),
-                new LatLng(37.5651279, 126.9767904),
-                new LatLng(37.5625365, 126.9832241),
-                new LatLng(37.5585305, 126.9809297),
-                new LatLng(37.5590777, 126.974617)
-        ));
-        polygon.setMap(naverMap);
-
-        // ############# 위치 변경 ##################
-        List<LatLng> coords = new ArrayList<>();
-        Collections.addAll(coords,
-                new LatLng(37.5640984, 126.9712268),
-                new LatLng(37.5651279, 126.9767904),
-                new LatLng(37.5625365, 126.9832241),
-                new LatLng(37.5585305, 126.9809297),
-                new LatLng(37.5590777, 126.974617)
-        );
-        polygon.setCoords(coords);
-        coords.set(0, new LatLng(37.5734571, 126.975335));
-        // 아직 반영되지 않음
-        polygon.setCoords(coords);
-        // 반영됨
-
-        // ############# 내부 홀 #################
-        polygon.setHoles(Collections.singletonList(Arrays.asList(
-                new LatLng(37.5612243, 126.9768938),
-                new LatLng(37.5627692, 126.9795502),
-                new LatLng(37.5628377, 126.976066)
-        )));
-
-        // ########## 면 색 변경 #############
-        polygon.setColor(Color.GREEN);
-        // ############# 테두리 두께 ############
-        polygon.setOutlineWidth(5);
-        // ############## 테두리 색상 #########
-        polygon.setOutlineColor(Color.RED); */
-
-        // ############ 서클 오버레이 ###############
-        CircleOverlay circle = new CircleOverlay();
-        circle.setCenter(new LatLng(37.5666102, 126.9783881));
-        circle.setRadius(500);
-        circle.setMap(naverMap);
-        // circle.setMap(null); // 제거
-        circle.setCenter(new LatLng(37.5666102, 126.9783881)); // 중심점 지정
-        circle.setRadius(500); // 서클 오버레이의 반경 500미터 지정
-        circle.setColor(Color.GREEN); // 색 지정
-        circle.setOutlineWidth(10); // 테두리 두께
-        circle.setOutlineColor(Color.BLUE); // 테두리 색상
-
         // 일반 지도
         // naverMap.setMapType(NaverMap.MapType.Basic);
         // 차량용 내비게이션 지도
@@ -197,8 +130,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // naverMap.setOnMapClickListener((pointF, coord) -> Toast.makeText(this, "클릭 : " + coord.latitude + ", " + coord.longitude,  Toast.LENGTH_SHORT).show());
         // naverMap.setOnMapLongClickListener(((pointF, coord) -> Toast.makeText(this, "롱 클릭 : " + coord.latitude + ", " + coord.longitude, Toast.LENGTH_SHORT).show()));
-
-
 
         // ############ 심볼 클릭 ################
         /* naverMap.setOnSymbolClickListener(symbol -> {
@@ -318,5 +249,85 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker2.setOnClickListener(listener);
         marker3.setOnClickListener(listener);
         */
+
+        // ########### 폴리라인 오버레이 #############
+        //PolylineOverlay polyline = new PolylineOverlay();
+        // ########### 폴리라인 오버레이 좌표열 지정 ################
+        /* polyline.setCoords(Arrays.asList(
+                new LatLng(37.57152, 126.97714),
+                new LatLng(37.56607, 126.98268),
+                new LatLng(37.56445, 126.97707),
+                new LatLng(37.55855, 126.97822)
+        ));
+        polyline.setMap(naverMap);
+        polyline.setWidth(10);
+        polyline.setColor(Color.GREEN);
+        polyline.setPattern(10,5);
+        polyline.setCapType(PolylineOverlay.LineCap.Round);
+        polyline.setJoinType(PolylineOverlay.LineJoin.Round); */
+
+        // ########## 폴리곤 오버레이 #############
+        /* PolygonOverlay polygon = new PolygonOverlay();
+        polygon.setCoords(Arrays.asList(
+                new LatLng(37.5640984, 126.9712268),
+                new LatLng(37.5651279, 126.9767904),
+                new LatLng(37.5625365, 126.9832241),
+                new LatLng(37.5585305, 126.9809297),
+                new LatLng(37.5590777, 126.974617)
+        ));
+        polygon.setMap(naverMap);
+
+        // ############# 위치 변경 ##################
+        List<LatLng> coords = new ArrayList<>();
+        Collections.addAll(coords,
+                new LatLng(37.5640984, 126.9712268),
+                new LatLng(37.5651279, 126.9767904),
+                new LatLng(37.5625365, 126.9832241),
+                new LatLng(37.5585305, 126.9809297),
+                new LatLng(37.5590777, 126.974617)
+        );
+        polygon.setCoords(coords);
+        coords.set(0, new LatLng(37.5734571, 126.975335));
+        // 아직 반영되지 않음
+        polygon.setCoords(coords);
+        // 반영됨
+
+        // ############# 내부 홀 #################
+        polygon.setHoles(Collections.singletonList(Arrays.asList(
+                new LatLng(37.5612243, 126.9768938),
+                new LatLng(37.5627692, 126.9795502),
+                new LatLng(37.5628377, 126.976066)
+        )));
+
+        // ########## 면 색 변경 #############
+        polygon.setColor(Color.GREEN);
+        // ############# 테두리 두께 ############
+        polygon.setOutlineWidth(5);
+        // ############## 테두리 색상 #########
+        polygon.setOutlineColor(Color.RED); */
+
+        // ############ 서클 오버레이 ###############
+        /* CircleOverlay circle = new CircleOverlay();
+        circle.setCenter(new LatLng(37.5666102, 126.9783881));
+        circle.setRadius(500);
+        circle.setMap(naverMap);
+        // circle.setMap(null); // 제거
+        circle.setCenter(new LatLng(37.5666102, 126.9783881)); // 중심점 지정
+        circle.setRadius(500); // 서클 오버레이의 반경 500미터 지정
+        circle.setColor(Color.GREEN); // 색 지정
+        circle.setOutlineWidth(10); // 테두리 두께
+        circle.setOutlineColor(Color.BLUE); // 테두리 색상 */
+
+        PathOverlay path = new PathOverlay();
+        path.setCoords(Arrays.asList(
+                new LatLng(37.57152, 126.97714),
+                new LatLng(37.56607, 126.98268),
+                new LatLng(37.56445, 126.97707),
+                new LatLng(37.55855, 126.97822)
+        ));
+        path.setMap(naverMap);
+
+        path.setWidth(30); // 두께
+        path.setOutlineWidth(5); // 테두리 두께
     }
 }
