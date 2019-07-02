@@ -21,9 +21,11 @@ import com.naver.maps.map.NaverMapOptions;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Align;
+import com.naver.maps.map.overlay.ArrowheadPathOverlay;
 import com.naver.maps.map.overlay.CircleOverlay;
 import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
+import com.naver.maps.map.overlay.MultipartPathOverlay;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.OverlayImage;
 import com.naver.maps.map.overlay.PathOverlay;
@@ -318,7 +320,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         circle.setOutlineWidth(10); // 테두리 두께
         circle.setOutlineColor(Color.BLUE); // 테두리 색상 */
 
-        PathOverlay path = new PathOverlay();
+        // ######################## 경로선 ######################
+        /* PathOverlay path = new PathOverlay();
         path.setCoords(Arrays.asList(
                 new LatLng(37.57152, 126.97714),
                 new LatLng(37.56607, 126.98268),
@@ -329,5 +332,99 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         path.setWidth(30); // 두께
         path.setOutlineWidth(5); // 테두리 두께
+
+        // #################### 패턴 #############################
+        path.setPatternImage(OverlayImage.fromResource(R.drawable.path_pattern));
+        path.setPatternInterval(10); */
+
+        // ############ 멀티파트 경로선 오버레이 ################
+        /* MultipartPathOverlay multipartPath = new MultipartPathOverlay();
+
+        multipartPath.setCoordParts(Arrays.asList(
+                Arrays.asList(
+                        new LatLng(37.5744287, 126.982625),
+                        new LatLng(37.57152, 126.97714),
+                        new LatLng(37.56607, 126.98268)
+                ),
+                Arrays.asList(
+                        new LatLng(37.56607, 126.98268),
+                        new LatLng(37.56445, 126.97707),
+                        new LatLng(37.55855, 126.97822)
+                )
+        ));
+
+        multipartPath.setColorParts(Arrays.asList(
+                new MultipartPathOverlay.ColorPart(
+                        Color.RED, Color.WHITE, Color.GRAY, Color.LTGRAY),
+                new MultipartPathOverlay.ColorPart(
+                        Color.GREEN, Color.WHITE, Color.DKGRAY, Color.LTGRAY)
+        ));
+
+        multipartPath.setMap(naverMap);
+
+
+        // #################### 좌표열 파트 ###################
+        multipartPath.setCoordParts(Arrays.asList(
+                Arrays.asList(
+                        new LatLng(37.5744287, 126.982625),
+                        new LatLng(37.57152, 126.97714),
+                        new LatLng(37.56607, 126.98268)
+                ),
+                Arrays.asList(
+                        new LatLng(37.56607, 126.98268),
+                        new LatLng(37.56445, 126.97707),
+                        new LatLng(37.55855, 126.97822)
+                )
+        ));
+
+        List<LatLng> coordPart1 = new ArrayList<>();
+        Collections.addAll(coordPart1,
+                new LatLng(37.5744287, 126.982625),
+                new LatLng(37.57152, 126.97714),
+                new LatLng(37.56607, 126.98268)
+        );
+
+        List<LatLng> coordPart2 = new ArrayList<>();
+        Collections.addAll(coordPart2,
+                new LatLng(37.56607, 126.98268),
+                new LatLng(37.56445, 126.97707),
+                new LatLng(37.55855, 126.97822)
+        );
+
+        List<List<LatLng>> coordParts = Arrays.asList(coordPart1, coordPart2);
+        multipartPath.setCoordParts(coordParts);
+
+        coordParts.get(0).set(0, new LatLng(37.5734571, 126.975335));
+// 아직 반영되지 않음
+        multipartPath.setCoordParts(coordParts);
+// 반영됨
+
+        // MultipartPathOverlay.ColorPart 객체 생성
+        MultipartPathOverlay.ColorPart colorPart = new MultipartPathOverlay.ColorPart(
+                Color.RED,   // 지나갈 경로선의 선 색상을 빨간색으로 지정
+                Color.WHITE, // 지나갈 경로선의 테두리 색상을 흰색으로 지정
+                Color.GRAY,  // 지나온 경로선의 선 색상을 회색으로 지정
+                Color.LTGRAY // 지나온 경로선의 테두리 색상을 밝은 회색으로 지정
+        );
+
+        // ############# 멀티파트 경로선 오버레이에 두 개의 색상 파트 지정 ############
+        multipartPath.setColorParts(Arrays.asList(
+                new MultipartPathOverlay.ColorPart(
+                        Color.RED, Color.WHITE, Color.GRAY, Color.LTGRAY),
+                new MultipartPathOverlay.ColorPart(
+                        Color.GREEN, Color.WHITE, Color.DKGRAY, Color.LTGRAY)
+        )); */
+
+        ArrowheadPathOverlay arrowheadPath = new ArrowheadPathOverlay();
+        arrowheadPath.setCoords(Arrays.asList(
+                new LatLng(37.568003, 126.9772503),
+                new LatLng(37.5701573, 126.9772503),
+                new LatLng(37.5701573, 126.9793745)
+        ));
+        arrowheadPath.setMap(naverMap);
+        arrowheadPath.setWidth(20); // 두께
+        arrowheadPath.setHeadSizeRatio(4); // 머리 크기
+        arrowheadPath.setColor(Color.GREEN); // 색상
+        arrowheadPath.setOutlineColor(Color.RED); // 테두리 색상
     }
 }
