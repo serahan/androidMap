@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //new LatLng(35.9424938, 126.683274), // 군산대학교 아카데미홀
                 new LatLng(35.9437857, 126.681656),
                 16,     // 줌 레벨
-                45,     // 기울임 각도
+                0,     // 기울임 각도
                 0     // 베어링 각도
         );
         naverMap.setCameraPosition(cameraPosition);
@@ -104,22 +104,72 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng southEast = new LatLng(44.35, 132);
         naverMap.setExtent(new LatLngBounds(northWest, southEast));
 
+        // ################ 정보창 #####################
+        InfoWindow infoWindow = new InfoWindow();
+        infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
+            @NonNull
+            @Override
+            public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                return (CharSequence)infoWindow.getMarker().getTag();
+            }
+        });
 
         // ############### 군산대학교 마커 ####################
         Marker marker_kunsanUni = new Marker();  // 군산대
         marker_kunsanUni.setPosition(new LatLng(35.945371, 126.682160));
         marker_kunsanUni.setMap(naverMap);
+        marker_kunsanUni.setTag("군산대학교");
+
+        marker_kunsanUni.setOnClickListener(overlay -> {
+            infoWindow.open(marker_kunsanUni); // 마커를 클릭할 때 정보창을 엶
+            return true;
+        });
 
         Marker marker_kunsanCenter = new Marker();  // 군산시청
         marker_kunsanCenter.setPosition(new LatLng(35.967612, 126.736825));
         marker_kunsanCenter.setMap(naverMap);
+        marker_kunsanCenter.setTag("군산 시청");
+
+        marker_kunsanCenter.setOnClickListener(overlay -> {
+            infoWindow.open(marker_kunsanCenter); // 마커를 클릭할 때 정보창을 엶
+            return true;
+        });
 
         Marker marker_WongoangUni = new Marker(); // 원광대
         marker_WongoangUni.setPosition(new LatLng(35.969381, 126.957475));
         marker_WongoangUni.setMap(naverMap);
+        marker_WongoangUni.setTag("원광대학교");
+
+        marker_WongoangUni.setOnClickListener(overlay -> {
+            infoWindow.open(marker_WongoangUni); // 마커를 클릭할 때 정보창을 엶
+            return true;
+        });
 
         Marker marker_JunbukUni = new Marker(); // 전북대
         marker_JunbukUni.setPosition(new LatLng(35.846695, 127.129278));
         marker_JunbukUni.setMap(naverMap);
+        marker_JunbukUni.setTag("전북대학교");
+
+        marker_JunbukUni.setOnClickListener(overlay -> {
+            infoWindow.open(marker_JunbukUni); // 마커를 클릭할 때 정보창을 엶
+            return true;
+        });
+
+//        Overlay.OnClickListener listener = overlay -> {
+//            Marker marker = (Marker)overlay;
+//
+//            if(marker.getInfoWindow() == null) {
+//                // 현재 마커에 정보 창이 열려있지 않을 경우 엶
+//                infoWindow.open(marker);
+//            } else {
+//                // 이미 현재 마커에 정보 창이 열려있을 경우 닫음
+//                infoWindow.close();
+//            }
+//            return true;
+//        };
+//        marker_kunsanUni.setOnClickListener(listener);
+//        marker_kunsanCenter.setOnClickListener(listener);
+//        marker_WongoangUni.setOnClickListener(listener);
+//        marker_JunbukUni.setOnClickListener(listener);
     }
 }
