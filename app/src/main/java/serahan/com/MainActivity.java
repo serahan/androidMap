@@ -25,8 +25,12 @@ import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.overlay.OverlayImage;
+import com.naver.maps.map.overlay.PolylineOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.util.MarkerIcons;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -92,6 +96,22 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng southEast = new LatLng(44.35, 132);
         naverMap.setExtent(new LatLngBounds(northWest, southEast));
 
+        // ########### 폴리라인 오버레이 #############
+        PolylineOverlay polyline = new PolylineOverlay();
+        // ########### 폴리라인 오버레이 좌표열 지정 ################
+        polyline.setCoords(Arrays.asList(
+                new LatLng(37.57152, 126.97714),
+                new LatLng(37.56607, 126.98268),
+                new LatLng(37.56445, 126.97707),
+                new LatLng(37.55855, 126.97822)
+        ));
+        polyline.setMap(naverMap);
+        polyline.setWidth(10);
+        polyline.setColor(Color.GREEN);
+        polyline.setPattern(10,5);
+        polyline.setCapType(PolylineOverlay.LineCap.Round);
+        polyline.setJoinType(PolylineOverlay.LineJoin.Round);
+
         // 일반 지도
         // naverMap.setMapType(NaverMap.MapType.Basic);
         // 차량용 내비게이션 지도
@@ -105,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // UI 설정
         // UiSettings : UI와 관련된 설정을 담당하는 클래스
-        UiSettings uiSettings = naverMap.getUiSettings();
+        // UiSettings uiSettings = naverMap.getUiSettings();
 
         // 컨트롤 : 지도에 대한 정보 및 간단한 조작 기능을 제공하는 지도 위 버튼
         // compassEnabled : 나침반 활성화 여부
@@ -113,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // zoomButtonEnabled : 줌 버튼 활성화 여부
         // indoorLevelPickerEnabled : 실내지도 층 피커 활성화 여부
         // locationButtonEnabled : 현위치 버튼 활성화 여부
-        uiSettings.setLocationButtonEnabled(true); // 현위치 활성화
+        // uiSettings.setLocationButtonEnabled(true); // 현위치 활성화
 
         // uiSettings.setTiltGesturesEnabled(false); // 틸트 제스처 비활성화 ( 틸트 : 두개의 손가락으로 지도 위아래 드래그 -> 기울임 각도 변경)
         // uiSettings.setRotateGesturesEnabled(false); // 회전 제스처 비활성화
@@ -124,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         // ############ 심볼 클릭 ################
-        naverMap.setOnSymbolClickListener(symbol -> {
+        /* naverMap.setOnSymbolClickListener(symbol -> {
                 if("군산대학교".equals(symbol.getCaption())){
                 Toast.makeText(this, "군산대학교 클릭", Toast.LENGTH_SHORT).show();
                 // 이벤트 소비, OnMapClick 이벤트는 발생하지 않음
@@ -132,10 +152,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
             // 이벤트 전파, OnMapClick 이벤트가 발생함
             return false;
-        });
+        }); */
 
         // ################# 마커 생성 #############
-        Marker marker = new Marker();
+        /* Marker marker = new Marker();
         marker.setPosition(new LatLng(35.9424938, 126.683274));
         marker.setMap(naverMap);
 
@@ -145,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         Marker marker3 = new Marker();
         marker3.setPosition(new LatLng(35.94298469, 126.68371497));
-        marker3.setMap(naverMap);
+        marker3.setMap(naverMap); */
 
         // ########### 마커 이미지 #############
         // OverlayImage : 오버레이에서 사용할 수 있는 비트맵 이미지 클래스
@@ -156,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // marker.setAnchor(new PointF(1,1));
 
         // 마커에 색 입히기
-        marker.setIcon(MarkerIcons.BLACK);
+        /*marker.setIcon(MarkerIcons.BLACK);
         marker.setIconTintColor(Color.RED);
         marker2.setIcon(MarkerIcons.BLACK);
         marker2.setIconTintColor(Color.YELLOW);
@@ -176,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             Toast.makeText(this, "마커 1 클릭", Toast.LENGTH_SHORT).show();
             // 이벤트 소비, OnMapClick 이벤트는 발생하지 않음
             return true;
-        });
+        }); */
 
         // ############## 더블 탭했을 때 더블 탭된 지점의 좌표 표시. 화면 확대 X ###############
         /* naverMap.setOnMapDoubleTapListener((pointF, coord) -> {
@@ -193,17 +213,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }); */
 
         // ############ 위치 표시 #########################
-        naverMap.setLocationSource(locationSource);
+        // naverMap.setLocationSource(locationSource);
         // ############ 위치 추적 모드 ####################
         // None : 위치 추적 X
         // NoFollow : 위치 추적 활성화 O, 현위치 오버레이가 사용자 위치 따라 이동, 지도 이동 X
         // Follow : 위치 추적 활성화 O, 현위치 오버레이와 카메라의 좌표가 사용자 위치 따라 이동. 카메라 건드리면 NoFollow로 전환
         // Face : 위치 추적 활성화 O, 현위치 오버레이, 카메라의 좌표, 베어링이 사용자의 위치 및 방향 따라 이동. 카메라 건드리면 NoFollow로 전환
-        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+        // naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
 
         // #########################################################
         // 정보 창
-        InfoWindow infoWindow = new InfoWindow();
+        /* InfoWindow infoWindow = new InfoWindow();
         infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
             @NonNull
             @Override
@@ -213,7 +233,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
         infoWindow.open(marker2);
 
-
+        marker.setTag("마커 1");
+        marker.setOnClickListener(overlay -> {
+            infoWindow.open(marker);
+            return true;
+        });
 
         // ############################################################
         // 지도를 클릭하면 정보 창을 닫음
@@ -236,6 +260,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         marker.setOnClickListener(listener);
         marker2.setOnClickListener(listener);
         marker3.setOnClickListener(listener);
-
+        */
     }
 }
