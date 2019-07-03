@@ -33,6 +33,7 @@ import com.naver.maps.map.overlay.PolygonOverlay;
 import com.naver.maps.map.overlay.PolylineOverlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.util.MarkerIcons;
+import com.naver.maps.map.CameraUpdate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         CameraPosition cameraPosition = new CameraPosition(
                 //new LatLng(35.9424938, 126.683274), // 군산대학교 아카데미홀
-                new LatLng((35.9437857+35.846695)/2, (126.681656+127.129278)/2),
+                new LatLng(35.945371, 126.682160),
                 8,     // 줌 레벨
                 0,     // 기울임 각도
                 0     // 베어링 각도
@@ -116,11 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // ############ 마커 리스트로 구현 ###################
 //        List<Marker> markers = new ArrayList<Marker>();
-//
-//        for(int i=0;i<4;i++)
-//        {
-//            Marker marker = new Marker();
-//        }
+//        markers.add()
 
         // ############### 군산대학교 마커 ####################
         Marker marker_kunsanUni = new Marker();  // 군산대
@@ -171,6 +168,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 marker_JunbukUni.getPosition()
         ));
         polyline.setMap(naverMap);
+
+        // ################### 마커 4개의 중심부에서 카메라 시작 #####################
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(marker_kunsanUni.getPosition());
+        builder.include(marker_kunsanCenter.getPosition());
+        builder.include(marker_WongoangUni.getPosition());
+        builder.include(marker_JunbukUni.getPosition());
+        LatLngBounds latLngBounds = builder.build();
+        CameraUpdate cameraUpdate = CameraUpdate.fitBounds(latLngBounds, 20);
+        naverMap.moveCamera(cameraUpdate);
 
 //        Overlay.OnClickListener listener = overlay -> {
 //            Marker marker = (Marker)overlay;
