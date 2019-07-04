@@ -45,6 +45,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationSource locationSource;
+    private int whileMax = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,22 +107,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng southEast = new LatLng(44.35, 132);
         naverMap.setExtent(new LatLngBounds(northWest, southEast));
 
+
+
+
         // ############ 마커 리스트로 구현 ###################
-        List<Marker> markers = new ArrayList<>(); // 선언
-        markers.add(new Marker(new LatLng(35.945371, 126.682160))); // 추가
-        markers.add(new Marker(new LatLng(35.967612, 126.736825)));
-        markers.add(new Marker(new LatLng(35.969381, 126.957475)));
-        markers.add(new Marker(new LatLng(35.846695, 127.129278)));
+        List<Marker> markers = new ArrayList<>();       // 선언
+        String[] Tags = {"군산대학교", "군산시청", "원광대학교", "전북대학교"};
+        LatLng[] locations = {  new LatLng(35.945371, 126.682160),
+                                new LatLng(35.967612, 126.736825),
+                                new LatLng(35.969381, 126.957475),
+                                new LatLng(35.846695, 127.129278) };
 
-        markers.get(0).setTag("군산대학교");
-        markers.get(1).setTag("군산시청");
-        markers.get(2).setTag("원광대학교");
-        markers.get(3).setTag("전북대학교");
-
-        markers.get(0).setMap(naverMap);
-        markers.get(1).setMap(naverMap);
-        markers.get(2).setMap(naverMap);
-        markers.get(3).setMap(naverMap);
+        for(int i=0;i<whileMax;i++)
+        {
+            markers.add(new Marker(locations[i]));
+            markers.get(i).setTag(Tags[i]);
+            markers.get(i).setMap(naverMap);
+        }
 
         // ################ 정보창 #####################
         InfoWindow infoWindow = new InfoWindow();
@@ -133,25 +135,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        markers.get(0).setOnClickListener(overlay -> {
-            infoWindow.open(markers.get(0)); // 마커를 클릭할 때 정보창을 엶
-            return true;
-        });
-
-        markers.get(1).setOnClickListener(overlay -> {
-            infoWindow.open(markers.get(1)); // 마커를 클릭할 때 정보창을 엶
-            return true;
-        });
-
-        markers.get(2).setOnClickListener(overlay -> {
-            infoWindow.open(markers.get(2)); // 마커를 클릭할 때 정보창을 엶
-            return true;
-        });
-
-        markers.get(3).setOnClickListener(overlay -> {
-            infoWindow.open(markers.get(3)); // 마커를 클릭할 때 정보창을 엶
-            return true;
-        });
+        for(int i=0;i<whileMax;i++)
+        {
+            int finalI = i;
+            markers.get(i).setOnClickListener(overlay -> {
+                infoWindow.open(markers.get(finalI));
+                return true;
+            });
+        }
 
         PolylineOverlay polyline = new PolylineOverlay();
         polyline.setCoords(Arrays.asList(
@@ -164,10 +155,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // ################### 마커 4개의 중심부에서 카메라 시작 #####################
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include( markers.get(0).getPosition());
-        builder.include( markers.get(1).getPosition());
-        builder.include( markers.get(2).getPosition());
-        builder.include( markers.get(3).getPosition());
+        for(int i=0;i<whileMax;i++)
+        {
+            builder.include(markers.get(i).getPosition());
+        }
         LatLngBounds latLngBounds = builder.build();
         CameraUpdate cameraUpdate = CameraUpdate.fitBounds(latLngBounds, 20);
         naverMap.moveCamera(cameraUpdate);
@@ -179,16 +170,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View view) {
                 if (infoWindow.isVisible()) {
                     infoWindow.setVisible(false);           // 정보창
-                    markers.get(0).setMap(null);            // 마커
-                    markers.get(1).setMap(null);            // 마커
-                    markers.get(2).setMap(null);            // 마커
-                    markers.get(3).setMap(null);            // 마커
+                    for(int i=0;i<whileMax;i++)
+                    {
+                        markers.get(i).setMap(null);
+                    }
                     polyline.setMap(null);                  // 셰이드
                 } else if(!infoWindow.isVisible()){
-                    markers.get(0).setMap(naverMap);        // 마커
-                    markers.get(1).setMap(naverMap);        // 마커
-                    markers.get(2).setMap(naverMap);        // 마커
-                    markers.get(3).setMap(naverMap);        // 마커
+                    for(int i=0;i<whileMax;i++)
+                    {
+                        markers.get(i).setMap(naverMap);
+                    }
                     infoWindow.setVisible(true);            // 정보창
                     polyline.setMap(naverMap);              // 셰이드
                 }
