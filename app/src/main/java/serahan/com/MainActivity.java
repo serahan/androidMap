@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.icu.text.IDNA;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
@@ -50,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_main);
         // ############### 위치 표시 ##################
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
-
         FragmentManager fm = getSupportFragmentManager();
         MapFragment mapFragment = (MapFragment)fm.findFragmentById(R.id.map);
         if(mapFragment == null) {
@@ -105,6 +106,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng southEast = new LatLng(44.35, 132);
         naverMap.setExtent(new LatLngBounds(northWest, southEast));
 
+        // ############ 마커 리스트로 구현 ###################
+        List<Marker> markers = new ArrayList<>(); // 선언
+        markers.add(new Marker(new LatLng(35.945371, 126.682160))); // 추가
+        markers.add(new Marker(new LatLng(35.967612, 126.736825)));
+        markers.add(new Marker(new LatLng(35.969381, 126.957475)));
+        markers.add(new Marker(new LatLng(35.846695, 127.129278)));
+
+        markers.get(0).setTag("군산대학교");
+        markers.get(1).setTag("군산시청");
+        markers.get(2).setTag("원광대학교");
+        markers.get(3).setTag("전북대학교");
+
+        markers.get(0).setMap(naverMap);
+        markers.get(1).setMap(naverMap);
+        markers.get(2).setMap(naverMap);
+        markers.get(3).setMap(naverMap);
+
         // ################ 정보창 #####################
         InfoWindow infoWindow = new InfoWindow();
         infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
@@ -115,85 +133,66 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        // ############ 마커 리스트로 구현 ###################
-//        List<Marker> markers = new ArrayList<Marker>();
-//        markers.add()
-
-        // ############### 군산대학교 마커 ####################
-        Marker marker_kunsanUni = new Marker();  // 군산대
-        marker_kunsanUni.setPosition(new LatLng(35.945371, 126.682160));
-        marker_kunsanUni.setMap(naverMap);
-        marker_kunsanUni.setTag("군산대학교");
-
-        marker_kunsanUni.setOnClickListener(overlay -> {
-            infoWindow.open(marker_kunsanUni); // 마커를 클릭할 때 정보창을 엶
+        markers.get(0).setOnClickListener(overlay -> {
+            infoWindow.open(markers.get(0)); // 마커를 클릭할 때 정보창을 엶
             return true;
         });
 
-        Marker marker_kunsanCenter = new Marker();  // 군산시청
-        marker_kunsanCenter.setPosition(new LatLng(35.967612, 126.736825));
-        marker_kunsanCenter.setMap(naverMap);
-        marker_kunsanCenter.setTag("군산 시청");
-
-        marker_kunsanCenter.setOnClickListener(overlay -> {
-            infoWindow.open(marker_kunsanCenter); // 마커를 클릭할 때 정보창을 엶
+        markers.get(1).setOnClickListener(overlay -> {
+            infoWindow.open(markers.get(1)); // 마커를 클릭할 때 정보창을 엶
             return true;
         });
 
-        Marker marker_WongoangUni = new Marker(); // 원광대
-        marker_WongoangUni.setPosition(new LatLng(35.969381, 126.957475));
-        marker_WongoangUni.setMap(naverMap);
-        marker_WongoangUni.setTag("원광대학교");
-
-        marker_WongoangUni.setOnClickListener(overlay -> {
-            infoWindow.open(marker_WongoangUni); // 마커를 클릭할 때 정보창을 엶
+        markers.get(2).setOnClickListener(overlay -> {
+            infoWindow.open(markers.get(2)); // 마커를 클릭할 때 정보창을 엶
             return true;
         });
 
-        Marker marker_JunbukUni = new Marker(); // 전북대
-        marker_JunbukUni.setPosition(new LatLng(35.846695, 127.129278));
-        marker_JunbukUni.setMap(naverMap);
-        marker_JunbukUni.setTag("전북대학교");
-
-        marker_JunbukUni.setOnClickListener(overlay -> {
-            infoWindow.open(marker_JunbukUni); // 마커를 클릭할 때 정보창을 엶
+        markers.get(3).setOnClickListener(overlay -> {
+            infoWindow.open(markers.get(3)); // 마커를 클릭할 때 정보창을 엶
             return true;
         });
 
         PolylineOverlay polyline = new PolylineOverlay();
         polyline.setCoords(Arrays.asList(
-                marker_kunsanUni.getPosition(),
-                marker_kunsanCenter.getPosition(),
-                marker_WongoangUni.getPosition(),
-                marker_JunbukUni.getPosition()
+                markers.get(0).getPosition(),
+                markers.get(1).getPosition(),
+                markers.get(2).getPosition(),
+                markers.get(3).getPosition()
         ));
         polyline.setMap(naverMap);
 
         // ################### 마커 4개의 중심부에서 카메라 시작 #####################
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-        builder.include(marker_kunsanUni.getPosition());
-        builder.include(marker_kunsanCenter.getPosition());
-        builder.include(marker_WongoangUni.getPosition());
-        builder.include(marker_JunbukUni.getPosition());
+        builder.include( markers.get(0).getPosition());
+        builder.include( markers.get(1).getPosition());
+        builder.include( markers.get(2).getPosition());
+        builder.include( markers.get(3).getPosition());
         LatLngBounds latLngBounds = builder.build();
         CameraUpdate cameraUpdate = CameraUpdate.fitBounds(latLngBounds, 20);
         naverMap.moveCamera(cameraUpdate);
 
-//        Overlay.OnClickListener listener = overlay -> {
-//            Marker marker = (Marker)overlay;
-//
-//            if(marker.getInfoWindow() == null) {
-//                // 현재 마커에 정보 창이 열려있지 않을 경우 엶
-//                infoWindow.open(marker);
-//            } else {
-//                // 이미 현재 마커에 정보 창이 열려있을 경우 닫음
-//                infoWindow.close();
-//            }
-//            return true;
-//        };
-//        marker_kunsanUni.setOnClickListener(listener);
-//        marker_kunsanCenter.setOnClickListener(listener);
-//        marker_WongoangUni.setOnClickListener(listener);
-//        marker_JunbukUni.setOnClickListener(listener);
+        // ########### 버튼 클릭 이벤트 ##############
+        Button button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (infoWindow.isVisible()) {
+                    infoWindow.setVisible(false);           // 정보창
+                    markers.get(0).setMap(null);            // 마커
+                    markers.get(1).setMap(null);            // 마커
+                    markers.get(2).setMap(null);            // 마커
+                    markers.get(3).setMap(null);            // 마커
+                    polyline.setMap(null);                  // 셰이드
+                } else if(!infoWindow.isVisible()){
+                    markers.get(0).setMap(naverMap);        // 마커
+                    markers.get(1).setMap(naverMap);        // 마커
+                    markers.get(2).setMap(naverMap);        // 마커
+                    markers.get(3).setMap(naverMap);        // 마커
+                    infoWindow.setVisible(true);            // 정보창
+                    polyline.setMap(naverMap);              // 셰이드
+                }
+            }
+        });
     }
 }
