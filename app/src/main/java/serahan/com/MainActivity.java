@@ -10,7 +10,10 @@ import android.graphics.PointF;
 import android.icu.text.IDNA;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
@@ -183,6 +186,45 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     infoWindow.setVisible(true);            // 정보창
                     polyline.setMap(naverMap);              // 셰이드
                 }
+            }
+        });
+
+        // 롱 클릭하면 Toast로 좌표 띄움
+        naverMap.setOnMapLongClickListener(((pointF, latLng) ->
+                Toast.makeText(this, latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show()));
+
+        // 위에 Spinner
+        Spinner spinner = (Spinner)findViewById(R.id.spinner);
+        String[] items = new String[] {"Basic", "Navi", "Satellite", "Hybrid", "Terrain"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,items);
+        spinner.setAdapter(adapter);
+
+        // Spinner Event Listener
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String str = adapterView.getItemAtPosition(i).toString();
+
+                if(str == "Basic") {
+                    naverMap.setMapType(NaverMap.MapType.Basic);
+                }
+                else if(str == "Navi") {
+                    naverMap.setMapType(NaverMap.MapType.Navi);
+                }
+                else if(str == "Satellite") {
+                    naverMap.setMapType(NaverMap.MapType.Satellite);
+                }
+                else if(str == "Hybrid") {
+                    naverMap.setMapType(NaverMap.MapType.Hybrid);
+                }
+                else if(str == "Terrain") {
+                    naverMap.setMapType(NaverMap.MapType.Terrain);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }

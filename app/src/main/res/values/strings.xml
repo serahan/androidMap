@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">androidMap</string>
+    <string name="click">Click</string>
+    <string name="textview">지도 유형 :</string>
 </resources>
