@@ -190,10 +190,23 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         // 롱 클릭하면 Toast로 좌표 띄움
-        naverMap.setOnMapLongClickListener(((pointF, latLng) ->
-                Toast.makeText(this, latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show()));
+//        naverMap.setOnMapLongClickListener(((pointF, latLng) ->
+//                Toast.makeText(this, latLng.latitude + ", " + latLng.longitude, Toast.LENGTH_SHORT).show()));
 
-        // 위에 Spinner
+        // 롱 클릭하면 정보창으로 좌표 띄움
+        naverMap.setOnMapLongClickListener(((pointF, latLng) -> {
+            infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(this) {
+                @NonNull
+                @Override
+                public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                    return (latLng.latitude + "," + latLng.longitude);
+                }
+            });
+            infoWindow.setPosition(latLng);
+            infoWindow.open(naverMap);
+        }));
+
+            // 위에 Spinner
         Spinner spinner = (Spinner)findViewById(R.id.spinner);
         String[] items = new String[] {"Basic", "Navi", "Satellite", "Hybrid", "Terrain"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,items);

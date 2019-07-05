@@ -48,7 +48,7 @@
             android:layout_height="45dp"
             android:layout_weight="1"
             android:text="@string/textview"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <Spinner
             android:id="@+id/spinner"
